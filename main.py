@@ -11,6 +11,8 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 
+logging.getLogger("httpx").setLevel(logging.WARNING)
+
 
 async def error_handler(update, context):
     if update is None:

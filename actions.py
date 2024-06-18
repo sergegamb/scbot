@@ -1,3 +1,4 @@
+from telegram import Update
 from telegram import (
         InlineKeyboardButton,
         InlineKeyboardMarkup,
@@ -23,40 +24,48 @@ async def request_view(update, request):
             reply_markup=InlineKeyboardMarkup.from_button(keyboard)
             )
     # telegram bot representation of Request
-    # composed from text message ( title and discription )
+    # composed of text message ( title and discription )
     # and keyboard ( actions and go back )
 
 
 async def request_list(update, context):
     requests = utils.get_some_requests()
-    # prepare simplifyed data
-    simplifyed_requests = []
-    for req in requests:
-        simplifyed_requests.append(req.representation())
-    # prepare keyboard
-    keyboard = []
-    for req in simplifyed_requests:
-        keyboard.append(
-            [InlineKeyboardButton(
-                text=req.get("id") + " " + req.get("subject"),
-                callback_data="request_" + req.get("id")
-                )
-                ]
+    keyboard = utils.compose_keyboard(requests, "subject", "request")
+    keyboard.append(
+        InlineKeyboardButton(
+            text="Go back",
+            callback_data="menu",
+        )
+    )
+    await update.callback_query.edit_message_text(
+            text="requests",
+            reply_markup=InlineKeyboardMarkup.from_column(keyboard)
             )
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    try:
-        await update.message.reply_text(
-                text="requests",
-                reply_markup=reply_markup
-                )
-    except:
-        await update.callback_query.edit_message_text(
-                text="requests",
-                reply_markup=reply_markup
-                )
 
 async def start_message(update, context):
     await update.message.reply_text("hi. what can i do for you?")
 
 async def help_message(update, context):
     await update.message.reply_text("ok. here is help contact: @sgamb")
+
+async def menu(update: Update, context):
+    menu_keyboard = InlineKeyboardMarkup.from_column([
+        InlineKeyboardButton(
+            text="Requests",
+            callback_data="requests",
+        ),
+        InlineKeyboardButton(
+            text="Tasks",
+            callback_data="tasks"
+        )]
+    )
+    if update.message:
+        await update.message.reply_text(
+            text="Menu",
+            reply_markup=menu_keyboard
+        )
+    else:
+        await update.callback_query.edit_message_text(
+            text="Menu",
+            reply_markup=menu_keyboard
+        )
