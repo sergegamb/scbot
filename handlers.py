@@ -14,6 +14,7 @@ from actions import (
 from task_actions import (
         task_view,
         task_list,
+        delete_task
         )
 
 my_handlers = [
@@ -25,5 +26,6 @@ my_handlers = [
         CallbackQueryHandler(request_list, "requests"),
         CallbackQueryHandler(task_view, "task_"),
         CallbackQueryHandler(task_list, "tasks"),
+        CallbackQueryHandler(delete_task, "delete_task_")
         ]
 

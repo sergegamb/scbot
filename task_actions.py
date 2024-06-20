@@ -15,24 +15,31 @@ async def task_view(update: Update, context):
             text="Go back to list view",
             callback_data="tasks"
             )
+    keyboard = [InlineKeyboardButton(
+            text="Delete",
+            callback_data=f"delete_task_{task.id}"
+    ), keyboard]
     await update.callback_query.edit_message_text(
             text=message_text,
-            reply_markup=InlineKeyboardMarkup.from_button(keyboard)
+            reply_markup=InlineKeyboardMarkup.from_column(keyboard)
             )
 
 
 async def task_list(update: Update, context):
     tasks = utils.get_some_tasks()  # TODO: get tasks from support center
-    # title is what we need
-    message_text = "tasks"  # TODO: get message from file based on user language prefferences
     keyboard = utils.compose_keyboard(tasks, "title", "task")
-    keyboard.append(
-        InlineKeyboardButton(
-            text="Go back",
-            callback_data="menu"
-        )
-    )
+    keyboard.append(utils.back_to_menu_button)
     await update.callback_query.edit_message_text(
             text="tasks",
             reply_markup=InlineKeyboardMarkup.from_column(keyboard)
             )
+
+
+async def delete_task(update: Update, context):
+    task = utils.get_task_by_callback_data(update.callback_query.data)
+    utils.delete_task(task.id)
+    return await task_list(update, context)
+
+
+async def add_task(update, context):
+    pass
