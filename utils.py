@@ -59,6 +59,10 @@ back_to_menu_button = InlineKeyboardButton(
     text="Go back",
     callback_data="menu"
 )
+add_task_button = InlineKeyboardButton(
+    text="Add Task",
+    callback_data="add_task"
+)
 
 
 def delete_task(task_id):
@@ -68,3 +72,8 @@ def delete_task(task_id):
         if task.id != task_id:
             new_tasks.append(task)
     tasks = new_tasks
+
+
+def add_task(task):
+    global tasks
+    tasks.append(task)

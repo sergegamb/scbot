@@ -1,3 +1,5 @@
+import random
+
 from telegram import Update
 from telegram import (
         InlineKeyboardButton,
@@ -5,6 +7,7 @@ from telegram import (
         )
 
 import utils
+from task_model_simplifyed import Task
 
 
 async def task_view(update: Update, context):
@@ -28,6 +31,7 @@ async def task_view(update: Update, context):
 async def task_list(update: Update, context):
     tasks = utils.get_some_tasks()  # TODO: get tasks from support center
     keyboard = utils.compose_keyboard(tasks, "title", "task")
+    keyboard.append(utils.add_task_button)
     keyboard.append(utils.back_to_menu_button)
     await update.callback_query.edit_message_text(
             text="tasks",
@@ -41,5 +45,29 @@ async def delete_task(update: Update, context):
     return await task_list(update, context)
 
 
-async def add_task(update, context):
-    pass
+async def get_task_title(update: Update, context):
+    task_title = update.message.text
+    task_id = str(random.randint(100, 600))
+    payload = {
+        "title": task_title,
+        "id": task_id
+    }
+    t = Task(**payload)
+    utils.add_task(t)
+    tasks = utils.get_some_tasks()  # TODO: DRY
+    keyboard = utils.compose_keyboard(tasks, "title", "task")
+    keyboard.append(utils.add_task_button)
+    keyboard.append(utils.back_to_menu_button)
+    await update.message.reply_text(
+        text="tasks",
+        reply_markup=InlineKeyboardMarkup.from_column(keyboard)
+    )
+    return -1
+    # return await task_list(update, context)
+
+
+async def add_task(update: Update, context):
+    await update.callback_query.edit_message_text(
+        "Ok. You can write your task to me, i will track it for you"
+    )
+    return 0
