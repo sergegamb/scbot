@@ -2,3 +2,4 @@
 *.json
 .idea
 contexttypes.py
+__pycache__

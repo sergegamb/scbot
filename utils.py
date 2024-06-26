@@ -35,34 +35,10 @@ def get_some_tasks():
     return tasks
 
 
-def compose_keyboard(objects, param, name):
-    simplified_objects = []
-    for obj in objects:
-        simplified_objects.append(obj.representation())
-    keyboard = []
-    for obj in simplified_objects:
-        button = InlineKeyboardButton(
-            text=f"#{obj.get('id')} {obj.get(param)}",
-            callback_data=f"{name}_{obj.get('id')}"
-        )
-        keyboard.append(button)
-    return keyboard
-
-
 def get_task_by_callback_data(callback_data):
     task_id = callback_data.split("_")[-1]
     # TODO: handle StopIteration exception
     return next(task for task in get_some_tasks() if task.id == task_id)
-
-
-back_to_menu_button = InlineKeyboardButton(
-    text="Go back",
-    callback_data="menu"
-)
-add_task_button = InlineKeyboardButton(
-    text="Add Task",
-    callback_data="add_task"
-)
 
 
 def delete_task(task_id):
