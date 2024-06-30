@@ -4,6 +4,7 @@ from telegram import InlineKeyboardButton
 
 from request_model import Model
 from task_model import Model as TaskModel
+from sc.interfaces import TaskInterface
 
 
 def get_some_requests():
@@ -28,7 +29,12 @@ def read_task():
     return serialized_data.tasks
 
 
-tasks = read_task()
+def read_tasks_from_sc():
+    return TaskInterface.list()
+
+
+# tasks = read_task()
+tasks = read_tasks_from_sc()
 
 
 def get_some_tasks():
