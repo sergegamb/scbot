@@ -1,6 +1,5 @@
-from telegram import (
-        InlineKeyboardButton
-)
+from telegram import InlineKeyboardButton
+
 
 def back_to(destination):
     return InlineKeyboardButton(
@@ -21,3 +20,13 @@ add_task_button = InlineKeyboardButton(
     callback_data="add_task"
 )
 
+
+requests_button = InlineKeyboardButton(
+            text="Requests",
+            callback_data="requests",
+        )
+
+tasks_button = InlineKeyboardButton(
+            text="Tasks",
+            callback_data="tasks"
+        )

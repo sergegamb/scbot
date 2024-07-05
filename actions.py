@@ -1,9 +1,6 @@
 from telegram import Update
-from telegram import (
-        InlineKeyboardButton,
-        InlineKeyboardMarkup,
-        )
 
+import keyboards
 import utils
 
 
@@ -15,57 +12,35 @@ async def request_view(update, request):
             f"#{request.id} {request.subject}\n"
             f"\n{request.short_description}"
             )
-    keyboard = InlineKeyboardButton(
-            text="Go back to list view",
-            callback_data="requests"
-            )
+    keyboard = keyboards.request_keyboard()
     await update.callback_query.edit_message_text(
             text=message_text,
-            reply_markup=InlineKeyboardMarkup.from_button(keyboard)
+            reply_markup=keyboard
             )
-    # telegram bot representation of Request
-    # composed of text message ( title and discription )
-    # and keyboard ( actions and go back )
 
 
-async def request_list(update, context):
+async def request_list(update, _):
     requests = utils.get_some_requests()
-    keyboard = utils.compose_keyboard(requests, "subject", "request")
-    keyboard.append(
-        InlineKeyboardButton(
-            text="Go back",
-            callback_data="menu",
-        )
-    )
+    keyboard = keyboards.request_list_keyboard(requests)
     await update.callback_query.edit_message_text(
             text="requests",
-            reply_markup=InlineKeyboardMarkup.from_column(keyboard)
+            reply_markup=keyboard
             )
 
-async def start_message(update, context):
+async def start_message(update, _):
     await update.message.reply_text("hi. what can i do for you?")
 
-async def help_message(update, context):
+async def help_message(update, _):
     await update.message.reply_text("ok. here is help contact: @sgamb")
 
-async def menu(update: Update, context):
-    menu_keyboard = InlineKeyboardMarkup.from_column([
-        InlineKeyboardButton(
-            text="Requests",
-            callback_data="requests",
-        ),
-        InlineKeyboardButton(
-            text="Tasks",
-            callback_data="tasks"
-        )]
+async def menu_command(update: Update, _):
+    await update.message.reply_text(
+        text="Menu",
+        reply_markup=keyboards.menu_keyboard
     )
-    if update.message:
-        await update.message.reply_text(
-            text="Menu",
-            reply_markup=menu_keyboard
-        )
-    else:
-        await update.callback_query.edit_message_text(
-            text="Menu",
-            reply_markup=menu_keyboard
-        )
+
+async def menu_callback(update: Update, _):
+    await update.callback_query.edit_message_text(
+        text="Menu",
+        reply_markup=keyboards.menu_keyboard
+    )

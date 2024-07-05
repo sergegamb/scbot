@@ -59,3 +59,18 @@ def delete_task(task_id):
 def add_task(task):
     global tasks
     tasks.append(task)
+
+
+def make_list(objects, param, name):
+    # TODO: rewrite so working not with dicts
+    simplified_objects = []
+    for obj in objects:
+        simplified_objects.append(obj.representation())
+    keyboard = []
+    for obj in simplified_objects:
+        button = InlineKeyboardButton(
+            text=f"#{obj.get('id')} {obj.get(param)}",
+            callback_data=f"{name}_{obj.get('id')}"
+        )
+        keyboard.append(button)
+    return keyboard
