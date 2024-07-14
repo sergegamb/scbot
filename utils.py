@@ -7,8 +7,8 @@ from task_model import Model as TaskModel
 from sc.interfaces import TaskInterface
 
 
-def get_some_requests():
-    with open("requests.json", "r") as f:
+def read_requests_from_a_file(filename):
+    with open(filename, "r") as f:
         raw_data = f.read()
     data = json.loads(raw_data)
     serialized_data = Model(**data)
@@ -35,11 +35,13 @@ def read_tasks_from_sc():
 
 # tasks = read_task()
 tasks = read_tasks_from_sc()
+requests = read_requests_from_a_file("requests.json")
 
 
 def get_some_tasks():
     return tasks
-
+def get_some_requests():
+    return requests
 
 def get_task_by_callback_data(callback_data):
     task_id = callback_data.split("_")[-1]
@@ -74,3 +76,12 @@ def make_list(objects, param, name):
         )
         keyboard.append(button)
     return keyboard
+
+
+def delete_request(request_id):
+    new_request = []
+    global requests
+    for req in requests:
+        if req.id != request_id:
+            new_request.append(req)
+    requests = new_request

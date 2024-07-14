@@ -12,6 +12,7 @@ from actions import (
         help_message,
         request_view,
         request_list,
+        delete_request,
         menu_command,
         menu_callback
         )
@@ -35,6 +36,7 @@ my_handlers = [
         CallbackQueryHandler(task_view, "task_"),
         CallbackQueryHandler(task_list, "tasks"),
         CallbackQueryHandler(delete_task, "delete_task_"),
+        CallbackQueryHandler(delete_request, "delete_request_"),
         ConversationHandler(
                 entry_points=[CallbackQueryHandler(add_task, "add_task")],
                 states={0: [MessageHandler(None, get_task_title)]},

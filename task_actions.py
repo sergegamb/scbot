@@ -30,6 +30,7 @@ async def task_list(update: Update, _):
 
 async def delete_task(update: Update, context):
     task = utils.get_task_by_callback_data(update.callback_query.data)
+    # TODO: make it a class method
     utils.delete_task(task.id)
     return await task_list(update, context)
 

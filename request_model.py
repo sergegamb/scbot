@@ -204,6 +204,9 @@ class Request(BaseModel):
                 "subject": self.subject,
                 }
 
+    def delete(self):
+        pass
+
 
 class Model(BaseModel):
     response_status: List[ResponseStatu]

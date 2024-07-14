@@ -15,6 +15,13 @@ def delete_task(task_id):
     )
 
 
+def delete_request(request_id):
+    return InlineKeyboardButton(
+        text="Delete request",
+        callback_data=f"delete_request_{request_id}",
+    )
+
+
 add_task_button = InlineKeyboardButton(
     text="Add Task",
     callback_data="add_task"

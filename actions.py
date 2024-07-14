@@ -4,15 +4,16 @@ import keyboards
 import utils
 
 
-async def request_view(update, request):
+async def request_view(update, _):
     request = utils.get_request_by_callback_data(update.callback_query.data)
+    # TODO: make it a decorator
     await update.callback_query.answer("Yo")
     # TODO: ask jpt to convert it to human readable text
     message_text = (
             f"#{request.id} {request.subject}\n"
             f"\n{request.short_description}"
             )
-    keyboard = keyboards.request_keyboard()
+    keyboard = keyboards.request_keyboard(request)
     await update.callback_query.edit_message_text(
             text=message_text,
             reply_markup=keyboard
@@ -26,6 +27,12 @@ async def request_list(update, _):
             text="requests",
             reply_markup=keyboard
             )
+
+async def delete_request(update, _):
+    request = utils.get_request_by_callback_data(update.callback_query.data)
+    # TODO: request.delte()
+    utils.delete_request(request.id)
+    return await request_list(update, _)
 
 async def start_message(update, _):
     await update.message.reply_text("hi. what can i do for you?")

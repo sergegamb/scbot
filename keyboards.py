@@ -16,9 +16,9 @@ def task_list_keyboard(tasks):
     return InlineKeyboardMarkup.from_column(keyboard)
 
 
-def request_keyboard():
-    keyboard = [buttons.back_to("requests")]
-    return InlineKeyboardMarkup.from_column(keyboard)
+def request_keyboard(request):
+    column = [buttons.delete_request(request.id), buttons.back_to("requests")]
+    return InlineKeyboardMarkup.from_column(column)
 
 
 def request_list_keyboard(requests):
