@@ -1,5 +1,7 @@
 from telegram import InlineKeyboardButton
 
+from utils import emoji
+
 
 def back_to(destination):
     return InlineKeyboardButton(
@@ -19,6 +21,21 @@ def delete_request(request_id):
     return InlineKeyboardButton(
         text="Delete request",
         callback_data=f"delete_request_{request_id}",
+    )
+
+
+def request_button(request):
+    # TODO: put button text template to another level
+    return InlineKeyboardButton(
+        text=f"#{request.id} {emoji(request.status)} {request.subject}",
+        callback_data=f"request_{request.id}"
+    )
+
+
+def task_button(task):
+    return InlineKeyboardButton(
+        text=f"#{task.id} {task.title}",
+        callback_data=f"task_{task.id}"
     )
 
 

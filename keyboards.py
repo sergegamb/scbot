@@ -10,7 +10,9 @@ def task_keyboard(task):
 
 
 def task_list_keyboard(tasks):
-    keyboard = utils.make_list(tasks, "title", "task")
+    keyboard = []
+    for task in tasks:
+        keyboard.append(buttons.task_button(task))
     keyboard.append(buttons.add_task_button)
     keyboard.append(buttons.back_to("menu"))
     return InlineKeyboardMarkup.from_column(keyboard)
@@ -22,7 +24,9 @@ def request_keyboard(request):
 
 
 def request_list_keyboard(requests):
-    keyboard = utils.make_list(requests, "subject", "request")
+    keyboard = []
+    for request in requests:
+        keyboard.append(buttons.request_button(request))
     keyboard.append(buttons.back_to("menu"))
     return InlineKeyboardMarkup.from_column(keyboard)
 
