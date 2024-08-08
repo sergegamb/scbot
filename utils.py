@@ -37,10 +37,6 @@ requests = read_requests_from_a_file("requests.json")
 def get_some_requests():
     return requests
 
-def get_task_by_callback_data(callback_data):
-    # TODO: handle exception
-    return TaskInterface.get(task_id)
-
 
 def delete_request(request_id):
     new_request = []

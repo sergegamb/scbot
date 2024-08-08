@@ -22,15 +22,14 @@ from task_actions import (
         delete_task,
         add_task,
         get_task_title,
+        request_task_view
         )
-
-filterwarnings(action="ignore", message=r"If.*", category=PTBUserWarning)
-
 my_handlers = [
         CommandHandler("start", start_message),
         CommandHandler("help", help_message),
         CommandHandler("menu", menu_command),
         CallbackQueryHandler(menu_callback, "menu"),
+        CallbackQueryHandler(request_task_view, "request_task_"),
         CallbackQueryHandler(request_view, "request_"),
         CallbackQueryHandler(request_list, "requests"),
         CallbackQueryHandler(task_view, "task_"),
@@ -45,3 +44,4 @@ my_handlers = [
         )
         ]
 
+filterwarnings(action="ignore", message=r"If.*", category=PTBUserWarning)

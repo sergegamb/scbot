@@ -17,6 +17,20 @@ async def task_view(update: Update, _):
             )
 
 
+async def request_task_view(update: Update, _):
+    callback_data = update.callback_query.data.split("_")
+    task_id = callback_data[-2]
+    request_id = callback_data[-1]
+    task = TaskInterface.get_request_task(task_id, request_id)
+    await update.callback_query.answer("Yo yo")
+    message_text = f"#{task.id}\n{task.title}"
+    keyboard = keyboards.task_keyboard(task)
+    await update.callback_query.edit_message_text(
+        text=message_text,
+        reply_markup=keyboard
+    )
+
+
 async def task_list(update: Update, _):
     tasks = TaskInterface.list()
     keyboard = keyboards.task_list_keyboard(tasks)

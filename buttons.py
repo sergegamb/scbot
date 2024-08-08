@@ -33,9 +33,12 @@ def request_button(request):
 
 
 def task_button(task):
+    callback_data = f"task_{task.id}"
+    if task.request is not None:  # request task
+        callback_data = f"request_task_{task.id}_{task.request.id}"
     return InlineKeyboardButton(
         text=f"#{task.id} {task.title}",
-        callback_data=f"task_{task.id}"
+        callback_data=callback_data
     )
 
 
