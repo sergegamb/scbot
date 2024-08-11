@@ -1,5 +1,7 @@
 import json
 
+from bs4 import BeautifulSoup
+
 from request_model import Model
 from task_model import Model as TaskModel
 from sc.interfaces import TaskInterface
@@ -11,12 +13,6 @@ def read_requests_from_a_file(filename):
     data = json.loads(raw_data)
     serialized_data = Model(**data)
     return serialized_data.requests
-
-
-def get_request_by_callback_data(callback_data):
-    request_id = callback_data.split("_")[-1]
-    # TODO: handle StopIteration exception
-    return next(request for request in get_some_requests() if request.id == request_id)
 
 
 def read_tasks_from_json(filename):
@@ -31,21 +27,12 @@ def read_tasks_from_sc():
     return TaskInterface.list()
 
 
-requests = read_requests_from_a_file("requests.json")
-
-
-def get_some_requests():
-    return requests
-
-
-def delete_request(request_id):
-    new_request = []
-    global requests
-    for req in requests:
-        if req.id != request_id:
-            new_request.append(req)
-    requests = new_request
-
-
 def emoji(status: dict):
     return "👍"
+
+
+def extract_text(html):
+    if html is None:
+        return "Empty"
+    soup = BeautifulSoup(html)
+    return soup.getText()

@@ -5,7 +5,10 @@ import utils
 
 
 def task_keyboard(task):
+
     column = [buttons.delete_task(task.id), buttons.back_to("tasks")]
+    if task.request:
+        column.append(buttons.view_request(task.request.id))
     return InlineKeyboardMarkup.from_column(column)
 
 
@@ -18,8 +21,14 @@ def task_list_keyboard(tasks):
     return InlineKeyboardMarkup.from_column(keyboard)
 
 
-def request_keyboard(request):
-    column = [buttons.delete_request(request.id), buttons.back_to("requests")]
+def request_keyboard(request, tasks):
+    column = []
+    for task in tasks:
+        column.append(buttons.task_button(task))
+    column.append(buttons.add_request_task_button(request.id))
+    column.append(
+        buttons.back_to("requests")
+    )
     return InlineKeyboardMarkup.from_column(column)
 
 

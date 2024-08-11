@@ -57,3 +57,17 @@ tasks_button = InlineKeyboardButton(
             text="Tasks",
             callback_data="tasks"
         )
+
+
+def view_request(request_id):
+    return InlineKeyboardButton(
+        text="View request",
+        callback_data=f"request_{request_id}"
+    )
+
+
+def add_request_task_button(request_id):
+    return InlineKeyboardButton(
+        text="Add Task",
+        callback_data=f"add_request_task_{request_id}"
+    )

@@ -7,14 +7,15 @@ from telegram.ext import (
         ConversationHandler
         )
 
-from actions import (
+from request_actions import (
         start_message,
         help_message,
         request_view,
         request_list,
-        delete_request,
         menu_command,
-        menu_callback
+        menu_callback,
+        get_request_task_title,
+        add_request_task,
         )
 from task_actions import (
         task_view,
@@ -35,10 +36,15 @@ my_handlers = [
         CallbackQueryHandler(task_view, "task_"),
         CallbackQueryHandler(task_list, "tasks"),
         CallbackQueryHandler(delete_task, "delete_task_"),
-        CallbackQueryHandler(delete_request, "delete_request_"),
         ConversationHandler(
                 entry_points=[CallbackQueryHandler(add_task, "add_task")],
                 states={0: [MessageHandler(None, get_task_title)]},
+                fallbacks=[],
+                per_message=False,
+        ),
+        ConversationHandler(
+                entry_points=[CallbackQueryHandler(add_request_task, "add_request_task_")],
+                states={0: [MessageHandler(None, get_request_task_title)]},
                 fallbacks=[],
                 per_message=False,
         )
