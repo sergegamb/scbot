@@ -17,7 +17,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 async def error_handler(update, context):
     if update is None:
         return
-    logging.warning('Update "%s" caused error "%s"', update, context.error)
+    logging.warning('Update caused error "%s"', context.error)
 
 
 def main():
