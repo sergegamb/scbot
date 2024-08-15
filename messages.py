@@ -1,8 +1,15 @@
 import utils
 
 
-task_message = "Таски"
+task_message = "Задачи"
 request_message = "Заявки"
+delete_task = "Удалить задачу"
+open_sc = "Открыть"
+menu = "Меню"
+start_message = "Привет. Как я могу вам помочь?"
+add_task = "Добавить задачу"
+provide_task_title_message = "Что за задача?"
+help_message = "Напишите @sgamb"
 
 # TODO: ask jpt to convert description to human readable text
 def request_template(request):
