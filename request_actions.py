@@ -44,11 +44,12 @@ async def get_request_task_title(update: Update, context):
     return -1
 
 
-async def request_list(update, _):
+async def request_list(update: Update, _):
     # TODO: Display my requests
-    requests = RequestInterface.list()
-    # TODO: Achieve pagination
-    keyboard = keyboards.request_list_keyboard(requests)
+    page = int(update.callback_query.data.split("_")[-1])
+    await update.callback_query.answer(f"Page {page}")
+    requests = RequestInterface.list(page)
+    keyboard = keyboards.request_list_keyboard(requests, page)
     await update.callback_query.edit_message_text(
             text=messages.request_message,
             reply_markup=keyboard

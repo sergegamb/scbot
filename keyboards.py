@@ -33,10 +33,15 @@ def request_keyboard(request, tasks):
     return InlineKeyboardMarkup.from_column(keyboard)
 
 
-def request_list_keyboard(requests):
-    keyboard = [buttons.request_button(request) for request in requests]
-    keyboard.append(buttons.back_to("menu"))
-    return InlineKeyboardMarkup.from_column(keyboard)
+def request_list_keyboard(requests, page):
+    keyboard = [[buttons.request_button(request)] for request in requests]
+    if page == 0:
+        keyboard.append([buttons.back_to("menu"), buttons.next_page(page)])
+    else:
+        keyboard.append([
+            buttons.previous_page(page), buttons.back_to("menu"), buttons.next_page(page)
+        ])
+    return InlineKeyboardMarkup(keyboard)
 
 
 menu_keyboard = InlineKeyboardMarkup.from_column(
