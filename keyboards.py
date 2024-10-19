@@ -1,7 +1,8 @@
-from telegram import InlineKeyboardMarkup
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 
 from sc.interfaces import RequestInterface
 import buttons
+from paging import next_page, previous_page
 
 
 def task_keyboard(task):
@@ -33,14 +34,15 @@ def request_keyboard(request, tasks):
     return InlineKeyboardMarkup.from_column(keyboard)
 
 
-def request_list_keyboard(requests, page):
-    keyboard = [[buttons.request_button(request)] for request in requests]
-    if page == 0:
-        keyboard.append([buttons.back_to("menu"), buttons.next_page(page)])
-    else:
-        keyboard.append([
-            buttons.previous_page(page), buttons.back_to("menu"), buttons.next_page(page)
-        ])
+def  request_list_keyboard(requests, filter_option):
+    first_button = InlineKeyboardButton(
+        text=f"Filter: {filter_option} requests",
+        callback_data="filters"
+    )
+    keyboard = [[first_button]]
+    for request in requests:
+        keyboard.append([buttons.request_button(request)])
+    keyboard.append([previous_page, buttons.back_to("menu"), next_page])
     return InlineKeyboardMarkup(keyboard)
 
 

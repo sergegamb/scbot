@@ -1,8 +1,14 @@
 from telegram import Update
+from telegram.ext import ContextTypes
 
-from sc.interfaces import RequestInterface, TaskInterface, RequestTaskInterface
+from sc.interfaces import RequestInterface, RequestTaskInterface
 import keyboards
 import messages
+
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 async def request_view(update, _):
@@ -44,19 +50,39 @@ async def get_request_task_title(update: Update, context):
     return -1
 
 
-async def request_list(update: Update, _):
-    # TODO: Display my requests
-    page = int(update.callback_query.data.split("_")[-1])
-    await update.callback_query.answer(f"Page {page}")
-    requests = RequestInterface.list(page)
-    keyboard = keyboards.request_list_keyboard(requests, page)
+TECHNICIANS = {
+    7602306060: "Сергей Гамбарян",
+    33091521: "Илья Маракушев",
+    122749292: "Павел Тетерин",
+    119298025: "Василий Гусев",
+    107551802: "Вадим Гусев",
+    137511220: "Дмитрий Одинцов",
+    5239813999: "Александр Михайлов"
+}
+
+
+async def request_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    logger.info(f"{context.user_data=}")
+    if context.user_data.get("page") is None:
+        context.user_data["page"] = 0
+    page = context.user_data["page"]
+    requester_tg_id = update.callback_query.from_user.id
+    technician_name = TECHNICIANS[requester_tg_id]
+    await update.callback_query.answer(f"Requests page {page}")
+    if context.user_data.get("filter") == "my":
+        requests = RequestInterface.list(page, technician_name)
+    else:
+        requests = RequestInterface.list(page)
+    keyboard = keyboards.request_list_keyboard(requests, context.user_data.get("filter"))
     await update.callback_query.edit_message_text(
             text=messages.request_message,
             reply_markup=keyboard
             )
 
 
-async def start_message(update, _):
+async def start_message(update, context: ContextTypes.DEFAULT_TYPE):
+    logger.info("Receive /start command")
+    context.user_data["filter"] = "all"
     await update.message.reply_text(
         text=messages.menu,
         reply_markup=keyboards.menu_keyboard

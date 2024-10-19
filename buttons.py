@@ -79,19 +79,3 @@ def open_request_task(task):
         text=messages.open_sc,
         url=url
     )
-
-
-def next_page(page):
-    button = InlineKeyboardButton(
-        text="Next page",
-        callback_data=f"requests_{page+1}"
-    )
-    return button
-
-
-def previous_page(page):
-    button = InlineKeyboardButton(
-        text="Previous page",
-        callback_data=f"requests_{page-1}"
-    )
-    return button

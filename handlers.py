@@ -1,5 +1,3 @@
-from warnings import filterwarnings
-from telegram.warnings import PTBUserWarning
 from telegram.ext import (
         CommandHandler,
         MessageHandler,
@@ -52,4 +50,3 @@ my_handlers = [
         )
         ]
 
-filterwarnings(action="ignore", message=r"If.*", category=PTBUserWarning)
