@@ -2,8 +2,16 @@ from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 
 from sc.interfaces import RequestInterface
 import buttons
-from paging import next_page, previous_page
 
+
+next_page  = InlineKeyboardButton(
+    text="Next page",
+    callback_data="next_page"
+    )
+previous_page = InlineKeyboardButton(
+    text="Previous page",
+    callback_data="previous_page"
+)
 
 def task_keyboard(task):
     keyboard = [buttons.delete_task(task.id),

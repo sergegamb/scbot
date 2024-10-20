@@ -1,6 +1,7 @@
 from telegram import Update
 from telegram.ext import ContextTypes
 
+from paging import requests_by_filter, request_list_view
 from sc.interfaces import RequestInterface, RequestTaskInterface
 import keyboards
 import messages
@@ -50,34 +51,11 @@ async def get_request_task_title(update: Update, context):
     return -1
 
 
-TECHNICIANS = {
-    7602306060: "Сергей Гамбарян",
-    33091521: "Илья Маракушев",
-    122749292: "Павел Тетерин",
-    119298025: "Василий Гусев",
-    107551802: "Вадим Гусев",
-    137511220: "Дмитрий Одинцов",
-    5239813999: "Александр Михайлов"
-}
 
 
-async def request_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    logger.info(f"{context.user_data=}")
-    if context.user_data.get("page") is None:
-        context.user_data["page"] = 0
-    page = context.user_data["page"]
-    requester_tg_id = update.callback_query.from_user.id
-    technician_name = TECHNICIANS[requester_tg_id]
-    await update.callback_query.answer(f"Requests page {page}")
-    if context.user_data.get("filter") == "my":
-        requests = RequestInterface.list(page, technician_name)
-    else:
-        requests = RequestInterface.list(page)
-    keyboard = keyboards.request_list_keyboard(requests, context.user_data.get("filter"))
-    await update.callback_query.edit_message_text(
-            text=messages.request_message,
-            reply_markup=keyboard
-            )
+async def request_list(update, context):
+    requests = requests_by_filter(update, context)
+    await request_list_view(update, context, requests)
 
 
 async def start_message(update, context: ContextTypes.DEFAULT_TYPE):

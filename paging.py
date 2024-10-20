@@ -6,15 +6,6 @@ import messages
 import keyboards
 
 
-next_page  = InlineKeyboardButton(
-    text="Next page",
-    callback_data="next_page"
-    )
-previous_page = InlineKeyboardButton(
-    text="Previous page",
-    callback_data="previous_page"
-)
-
 TECHNICIANS = {
     7602306060: "Сергей Гамбарян",
     33091521: "Илья Маракушев",
@@ -25,17 +16,29 @@ TECHNICIANS = {
     5239813999: "Александр Михайлов"
 }
 
+def requests_by_filter(update, context):
+    if context.user_data.get("filter") is None:
+        context.user_data["filter"] = "all"
+    if context.user_data.get("page") is None:
+        context.user_data["page"] = 0
+    if context.user_data["filter"] == "all":
+        requests = RequestInterface.list_all(context.user_data["page"])
+    elif context.user_data["filter"] == "my":
+        requests = RequestInterface.list_technician(
+            context.user_data["page"],
+            TECHNICIANS[update.callback_query.from_user.id]
+        )
+    else:  # groups
+        requests = RequestInterface.list_technician_group(
+            context.user_data["page"],
+            TECHNICIANS[update.callback_query.from_user.id]
+        )
+    return requests
 
 # DUPLICATE
-async def request_list_view(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def request_list_view(update: Update, context: ContextTypes.DEFAULT_TYPE, requests):
     page = context.user_data["page"]
-    requester_tg_id = update.callback_query.from_user.id
-    technician_name = TECHNICIANS[requester_tg_id]
     await update.callback_query.answer(f"Requests page {page}")
-    if context.user_data.get("filter") == "my":
-        requests = RequestInterface.list(page, technician_name)
-    else:
-        requests = RequestInterface.list(page)
     keyboard = keyboards.request_list_keyboard(requests, context.user_data.get("filter"))
     await update.callback_query.edit_message_text(
             text=messages.request_message,
@@ -48,7 +51,8 @@ async def next_page_callback(update: Update, context: ContextTypes.DEFAULT_TYPE)
         context.user_data["page"] += 1
     except KeyError:
         context.user_data["page"] = 0
-    await request_list_view(update, context)
+    requests = requests_by_filter(update, context)
+    await request_list_view(update, context, requests)
 
 
 async def previous_page_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -59,7 +63,8 @@ async def previous_page_callback(update: Update, context: ContextTypes.DEFAULT_T
             # TODO: Do not display Previous page button on the first page
     except KeyError:
         context.user_data["page"] = 0
-    await request_list_view(update, context)
+    requests = requests_by_filter(update, context)
+    await request_list_view(update, context, requests)
 
 
 next_page_handler = CallbackQueryHandler(next_page_callback, "next_page")
