@@ -2,7 +2,7 @@ from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 
 from sc.interfaces import RequestInterface
 import buttons
-
+from sc.request_model import Request
 
 next_page  = InlineKeyboardButton(
     text="Next page",
@@ -35,9 +35,13 @@ def task_list_keyboard(tasks):
     return InlineKeyboardMarkup.from_column(keyboard)
 
 
-def request_keyboard(request, tasks):
+def request_keyboard(request: Request, tasks):
     keyboard = [buttons.task_button(task) for task in tasks]
     keyboard.append(buttons.add_request_task_button(request.id))
+    if request.status.name != "В работе":
+        keyboard.append(buttons.to_work_button)
+    if request.status.name != "Приостановлена":
+        keyboard.append(buttons.to_hold_button)
     keyboard.append(buttons.back_to("requests"))
     return InlineKeyboardMarkup.from_column(keyboard)
 

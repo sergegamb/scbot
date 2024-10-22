@@ -2,18 +2,21 @@ import os
 import logging
 import warnings
 
+from bs4 import GuessedAtParserWarning
 from telegram.ext import ApplicationBuilder
-from telegram.warnings import PTBUserWarning
 from urllib3.exceptions import InsecureRequestWarning
+
+from to_hold import to_hold_handler
+from to_work import to_work_handler
+
 
 warnings.filterwarnings(
     action="ignore",
-    message=r".*CallbackQueryHandler",
-    category=PTBUserWarning
+    category=InsecureRequestWarning
 )
 warnings.filterwarnings(
     action="ignore",
-    category=InsecureRequestWarning
+    category=GuessedAtParserWarning
 )
 
 from handlers import my_handlers
@@ -41,6 +44,8 @@ def main():
     app.add_handlers(my_handlers)
     app.add_handler(filters_handler)
     app.add_handlers(paging_handlers)
+    app.add_handler(to_work_handler)
+    app.add_handler(to_hold_handler)
     app.run_polling()
 
 

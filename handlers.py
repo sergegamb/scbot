@@ -1,9 +1,12 @@
+import warnings
+
 from telegram.ext import (
         CommandHandler,
         MessageHandler,
         CallbackQueryHandler,
         ConversationHandler
         )
+from telegram.warnings import PTBUserWarning
 
 from request_actions import (
         start_message,
@@ -24,6 +27,13 @@ from task_actions import (
         get_task_title,
         request_task_view
         )
+
+warnings.filterwarnings(
+    action="ignore",
+    message=r".*CallbackQueryHandler",
+    category=PTBUserWarning
+)
+
 my_handlers = [
         CommandHandler("start", start_message),
         CommandHandler("help", help_message),

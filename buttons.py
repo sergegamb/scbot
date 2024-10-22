@@ -79,3 +79,13 @@ def open_request_task(task):
         text=messages.open_sc,
         url=url
     )
+
+to_work_button = InlineKeyboardButton(
+    text="В работу",
+    callback_data="to_work"
+)
+
+to_hold_button = InlineKeyboardButton(
+    text="Приостановить",
+    callback_data="to_hold"
+)

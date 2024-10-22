@@ -18,7 +18,7 @@ TECHNICIANS = {
 
 def requests_by_filter(update, context):
     if context.user_data.get("filter") is None:
-        context.user_data["filter"] = "all"
+        context.user_data["filter"] = "my"
     if context.user_data.get("page") is None:
         context.user_data["page"] = 0
     if context.user_data["filter"] == "all":

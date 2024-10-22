@@ -12,8 +12,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-async def request_view(update, _):
+async def request_view(update, context: ContextTypes.DEFAULT_TYPE):
     request_id = update.callback_query.data.split("_")[-1]
+    context.user_data["request_id"] = request_id
     request = RequestInterface.get(request_id)
     request_tasks = RequestTaskInterface.list(request.id)
     await update.callback_query.answer("Yo")
