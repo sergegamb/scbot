@@ -89,3 +89,8 @@ to_hold_button = InlineKeyboardButton(
     text="Приостановить",
     callback_data="to_hold"
 )
+
+task_to_done = InlineKeyboardButton(
+    text="Выполнена",
+    callback_data="to_done"
+)

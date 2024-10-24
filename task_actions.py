@@ -1,12 +1,14 @@
 from telegram import Update
+from telegram.ext import ContextTypes
 
 import keyboards
 import messages
 from sc.interfaces import TaskInterface, RequestTaskInterface
 
 
-async def task_view(update: Update, _):
+async def task_view(update: Update, context: ContextTypes.DEFAULT_TYPE):
     task_id = update.callback_query.data.split("_")[-1]
+    context.user_data["task_id"] = task_id
     task = TaskInterface.get(task_id)
     await update.callback_query.answer("Yoy")
     message_text = f"#{task.id}\n{task.title}"
@@ -17,10 +19,11 @@ async def task_view(update: Update, _):
             )
 
 
-async def request_task_view(update: Update, _):
+async def request_task_view(update: Update, context: ContextTypes.DEFAULT_TYPE):
     callback_data = update.callback_query.data.split("_")
     task_id = callback_data[-2]
     request_id = callback_data[-1]
+    context.user_data["task_id"] = task_id
     task = RequestTaskInterface.get(request_id, task_id)
     await update.callback_query.answer("Yo yo")
     message_text = f"#{task.id}\n{task.title}"

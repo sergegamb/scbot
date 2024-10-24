@@ -15,6 +15,7 @@ previous_page = InlineKeyboardButton(
 
 def task_keyboard(task):
     keyboard = [buttons.delete_task(task.id),
+                buttons.task_to_done,
                 buttons.back_to("tasks")]
     return InlineKeyboardMarkup.from_column(keyboard)
 
@@ -22,6 +23,7 @@ def task_keyboard(task):
 def request_task_keyboard(task):
     request = RequestInterface.get(task.request.id)
     keyboard = [buttons.delete_request_task(task.request.id, task.id),
+                buttons.task_to_done,
                 buttons.request_button(request),
                 buttons.open_request_task(task),
                 buttons.back_to("menu")]
