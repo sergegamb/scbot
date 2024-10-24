@@ -42,6 +42,7 @@ def request_keyboard(request: Request, tasks):
     keyboard.append(buttons.add_request_task_button(request.id))
     if request.status.name != "В работе":
         keyboard.append(buttons.to_work_button)
+        keyboard.append(buttons.add_worklog)
     if request.status.name != "Приостановлена":
         keyboard.append(buttons.to_hold_button)
     keyboard.append(buttons.back_to("requests"))

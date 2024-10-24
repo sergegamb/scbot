@@ -1,4 +1,5 @@
 import logging
+import time
 
 from telegram import Update
 from telegram.ext import ContextTypes, CallbackQueryHandler
@@ -15,6 +16,7 @@ async def to_work_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
     logger.info(f"To work request {request_id}")
     RequestInterface.to_work(request_id)
     context.user_data["request_id"] = request_id
+    context.user_data["start_time"] = int(time.time())
     request = RequestInterface.get(request_id)
     request_tasks = RequestTaskInterface.list(request.id)
     await update.callback_query.answer("Yo")

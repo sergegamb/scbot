@@ -6,6 +6,7 @@ from bs4 import GuessedAtParserWarning
 from telegram.ext import ApplicationBuilder
 from urllib3.exceptions import InsecureRequestWarning
 
+from add_worklog import add_worklog_handler
 from task_to_done import task_to_done_handler
 from to_hold import to_hold_handler
 from to_work import to_work_handler
@@ -48,6 +49,7 @@ def main():
     app.add_handler(to_work_handler)
     app.add_handler(to_hold_handler)
     app.add_handler(task_to_done_handler)
+    app.add_handler(add_worklog_handler)
     app.run_polling()
 
 

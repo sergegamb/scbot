@@ -94,3 +94,8 @@ task_to_done = InlineKeyboardButton(
     text="Выполнена",
     callback_data="to_done"
 )
+
+add_worklog = InlineKeyboardButton(
+    text="Внести ворклог",
+    callback_data="add_worklog"
+)
