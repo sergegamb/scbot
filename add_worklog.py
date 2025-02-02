@@ -4,6 +4,7 @@ from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler, CallbackQueryHandler, MessageHandler
 
 from sc.interfaces import BillingTimeEntryInterface
+from messages import add_worklog_message
 
 GET = 0
 
@@ -20,7 +21,7 @@ TECHNICIANS = {
 
 async def add_worklog(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.callback_query.answer("Хорошо")
-    await update.callback_query.edit_message_text("Введите описание последнего ворклога")
+    await update.callback_query.edit_message_text(add_worklog_message)
     return GET
 
 
@@ -28,8 +29,14 @@ async def get_worklog_description(update: Update, context: ContextTypes.DEFAULT_
     request_id = context.user_data["request_id"]
     owner = TECHNICIANS[update.message.from_user.id]
     end_time = int(time.time()) * 1000
-    start_time = end_time - 3600000
+    hours = 1
     description = update.message.text
+    if description[0] == '+':
+        hours = 0
+        while description[0] == '+':
+            description = description[1:]
+            hours += 1
+    start_time = end_time - hours * 3600000
     answer = BillingTimeEntryInterface.add(request_id, owner, start_time, end_time, description)
     await update.message.reply_text(answer)
     return ConversationHandler.END

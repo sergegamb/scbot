@@ -10,6 +10,7 @@ start_message = "Привет. Как я могу вам помочь?"
 add_task = "Добавить задачу"
 provide_task_title_message = "Что за задача?"
 help_message = "Напишите @sgamb"
+add_worklog_message = "Введите описание ворклога. Число часов можно указать плюсами в начале"
 
 # TODO: ask jpt to convert description to human readable text
 def request_template(request):
