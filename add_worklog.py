@@ -1,3 +1,5 @@
+import time
+
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler, CallbackQueryHandler, MessageHandler
 
@@ -25,8 +27,8 @@ async def add_worklog(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def get_worklog_description(update: Update, context: ContextTypes.DEFAULT_TYPE):
     request_id = context.user_data["request_id"]
     owner = TECHNICIANS[update.message.from_user.id]
-    start_time = context.user_data["start_time"]
-    end_time = context.user_data["end_time"]
+    end_time = int(time.time()) * 1000
+    start_time = end_time - 3600000
     description = update.message.text
     answer = BillingTimeEntryInterface.add(request_id, owner, start_time, end_time, description)
     await update.message.reply_text(answer)
