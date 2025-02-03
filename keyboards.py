@@ -16,6 +16,7 @@ previous_page = InlineKeyboardButton(
 def task_keyboard(task):
     keyboard = [buttons.delete_task(task.id),
                 buttons.task_to_done,
+                buttons.open_task(task.id),
                 buttons.back_to("tasks")]
     return InlineKeyboardMarkup.from_column(keyboard)
 
@@ -40,11 +41,8 @@ def task_list_keyboard(tasks):
 def request_keyboard(request: Request, tasks):
     keyboard = [buttons.task_button(task) for task in tasks]
     keyboard.append(buttons.add_request_task_button(request.id))
-    if request.status.name != "В работе":
-        keyboard.append(buttons.to_work_button)
-        keyboard.append(buttons.add_worklog)
-    if request.status.name != "Приостановлена":
-        keyboard.append(buttons.to_hold_button)
+    keyboard.append(buttons.add_worklog)
+    keyboard.append(buttons.open_request(request.id))
     keyboard.append(buttons.back_to("requests"))
     return InlineKeyboardMarkup.from_column(keyboard)
 

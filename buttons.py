@@ -69,6 +69,28 @@ def add_request_task_button(request_id):
     )
 
 
+def open_request(request_id):
+    domain = os.getenv("URL")[:-7]
+    url = (
+        f"{domain}/WorkOrder.do?woMode=viewWO&woID={request_id}"
+    )
+    return InlineKeyboardButton(
+        text=messages.open_sc,
+        url=url
+    )
+
+
+def open_task(task_id):
+    domain = os.getenv("URL")[:-7]
+    url = (
+        f"{domain}/ui/tasks?mode=detail&taskId={task_id}"
+    )
+    return InlineKeyboardButton(
+        text=messages.open_sc,
+        url=url
+    )
+
+
 def open_request_task(task):
     domain = os.getenv("URL")[:-7]
     url = (
