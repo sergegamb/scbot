@@ -5,6 +5,9 @@ import warnings
 from bs4 import GuessedAtParserWarning
 from telegram.ext import ApplicationBuilder
 from urllib3.exceptions import InsecureRequestWarning
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from add_worklog import add_worklog_handler
 from task_to_done import task_to_done_handler
