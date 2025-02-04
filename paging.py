@@ -1,20 +1,15 @@
+import logging
+
 from telegram import Update, InlineKeyboardButton
 from telegram.ext import CallbackQueryHandler, ContextTypes
 
 from sc.interfaces import RequestInterface
 import messages
 import keyboards
+from tech import TECHNICIANS
 
 
-TECHNICIANS = {
-    7602306060: "Сергей Гамбарян",
-    33091521: "Илья Маракушев",
-    122749292: "Павел Тетерин",
-    119298025: "Василий Гусев",
-    107551802: "Вадим Гусев",
-    137511220: "Дмитрий Одинцов",
-    5239813999: "Александр Михайлов"
-}
+logger = logging.getLogger(__name__)
 
 def requests_by_filter(update, context):
     if context.user_data.get("filter") is None:
@@ -47,15 +42,20 @@ async def request_list_view(update: Update, context: ContextTypes.DEFAULT_TYPE, 
 
 
 async def next_page_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = TECHNICIANS[update.callback_query.from_user.id]
+    logger.info(f"Receive next_page callback query from {user}")
     try:
         context.user_data["page"] += 1
     except KeyError:
         context.user_data["page"] = 0
+    logger.info(context.user_data)
     requests = requests_by_filter(update, context)
     await request_list_view(update, context, requests)
 
 
 async def previous_page_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = TECHNICIANS[update.callback_query.from_user.id]
+    logger.info(f"Receive prev_page callback query from {user}")
     try:
         context.user_data["page"] -= 1
         if context.user_data["page"] < 0:
@@ -63,6 +63,7 @@ async def previous_page_callback(update: Update, context: ContextTypes.DEFAULT_T
             # TODO: Do not display Previous page button on the first page
     except KeyError:
         context.user_data["page"] = 0
+    logger.info(context.user_data)
     requests = requests_by_filter(update, context)
     await request_list_view(update, context, requests)
 

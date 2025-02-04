@@ -3,7 +3,7 @@ from telegram.ext import ContextTypes
 
 import keyboards
 import messages
-from sc.interfaces import TaskInterface, RequestTaskInterface
+from sc.interfaces import TaskInterface, RequestTaskInterface, RequestInterface
 
 
 async def task_view(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -53,8 +53,13 @@ async def delete_request_task(update: Update, _):
     task_id = update.callback_query.data.split("_")[-1]
     request_id = update.callback_query.data.split("_")[-2]
     RequestTaskInterface.delete(request_id, task_id)
-    # TODO: return request view
-    return await task_list(update, _)
+    request = RequestInterface.get(request_id)
+    request_tasks = RequestTaskInterface.list(request.id)
+    keyboard = keyboards.request_keyboard(request, request_tasks)
+    await update.callback_query.edit_message_text(
+        text=messages.request_template(request),
+        reply_markup=keyboard
+    )
 
 
 async def get_task_title(update: Update, _):

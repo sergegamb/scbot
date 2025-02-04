@@ -8,9 +8,10 @@ open_sc = "Открыть"
 menu = "Меню"
 start_message = "Привет. Как я могу вам помочь?"
 add_task = "Добавить задачу"
-provide_task_title_message = "Что за задача?"
+provide_task_title_message = "Что за задача? Отменить можно /cancel"
 help_message = "Напишите @sgamb"
-add_worklog_message = "Введите описание ворклога. Число часов можно указать плюсами в начале"
+add_worklog_message = "Введите описание ворклога. Число часов можно указать плюсами в начале. Либо отправьте /cancel"
+unknown_user = "Извините, бот временно не поддерживает работу с вами"
 
 # TODO: ask jpt to convert description to human readable text
 def request_template(request):

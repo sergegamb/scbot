@@ -40,7 +40,7 @@ def task_list_keyboard(tasks):
 
 def request_keyboard(request: Request, tasks):
     keyboard = [buttons.task_button(task) for task in tasks]
-    keyboard.append(buttons.add_request_task_button(request.id))
+    keyboard.append(buttons.add_request_task_button)
     keyboard.append(buttons.add_worklog)
     keyboard.append(buttons.open_request(request.id))
     keyboard.append(buttons.back_to("requests"))

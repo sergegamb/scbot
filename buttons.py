@@ -62,11 +62,11 @@ tasks_button = InlineKeyboardButton(
         )
 
 
-def add_request_task_button(request_id):
-    return InlineKeyboardButton(
-        text=messages.add_task,
-        callback_data=f"add_request_task_{request_id}"
-    )
+
+add_request_task_button = InlineKeyboardButton(
+    text=messages.add_task,
+    callback_data=f"add_request_task"
+)
 
 
 def open_request(request_id):
