@@ -10,7 +10,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from add_worklog import add_worklog_handler
-from task_to_done import task_to_done_handler
+from add_task_worklog import add_task_worklog_handler
+from task_to_done import request_task_to_done_handler, task_to_done_handler
 from to_hold import to_hold_handler
 from to_work import to_work_handler
 
@@ -46,12 +47,14 @@ async def error_handler(update, context):
 def main():
     app = ApplicationBuilder().token(os.getenv("BOTTOKEN")).build()
     app.add_error_handler(error_handler)
+    app.add_handler(add_task_worklog_handler)
+    app.add_handler(request_task_to_done_handler)
+    app.add_handler(task_to_done_handler)
     app.add_handlers(my_handlers)
     app.add_handler(filters_handler)
     app.add_handlers(paging_handlers)
     app.add_handler(to_work_handler)
     app.add_handler(to_hold_handler)
-    app.add_handler(task_to_done_handler)
     app.add_handler(add_worklog_handler)
     app.run_polling()
 

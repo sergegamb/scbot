@@ -6,12 +6,32 @@ from telegram.ext import ContextTypes, CallbackQueryHandler
 from sc.interfaces import TaskInterface, RequestTaskInterface, RequestInterface
 import messages
 import keyboards
+from tech import TECHNICIANS
 
 
 logger = logging.getLogger(__name__)
 
 
 async def task_to_done_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = TECHNICIANS.get(update.callback_query.from_user.id)
+    logger.info(f"Receive {update.callback_query.data} callback from {user}")
+    task_id = context.user_data["task_id"]
+    logger.info(f"{task_id=}")
+    TaskInterface.to_done(task_id)
+    await update.callback_query.answer("Выполнена")
+    task = TaskInterface.get(task_id)
+    await update.callback_query.answer("Yoy")
+    message_text = f"#{task.id}\n{task.title}"
+    keyboard = keyboards.task_keyboard(task)
+    await update.callback_query.edit_message_text(
+        text=message_text,
+        reply_markup=keyboard
+    )
+
+
+async def request_task_to_done_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = TECHNICIANS.get(update.callback_query.from_user.id)
+    logger.info(f"Receive {update.callback_query.data} callback from {user}")
     task_id = context.user_data["task_id"]
     request_id = context.user_data["request_id"]
     logger.info(f"{task_id=}")
@@ -28,5 +48,8 @@ async def task_to_done_callback(update: Update, context: ContextTypes.DEFAULT_TY
 
 
 task_to_done_handler = CallbackQueryHandler(
-    task_to_done_callback, "to_done"
+    task_to_done_callback, "task_to_done"
+)
+request_task_to_done_handler = CallbackQueryHandler(
+    request_task_to_done_callback, "request_task_to_done"
 )

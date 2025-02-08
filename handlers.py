@@ -50,8 +50,8 @@ my_handlers = [
     CallbackQueryHandler(delete_request_task, "delete_request_task_"),
     ConversationHandler(
         entry_points=[CallbackQueryHandler(add_task, "add_task")],
-        states={0: [MessageHandler(None, get_task_title)]},
-        fallbacks=[],
+        states={0: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_task_title)]},
+        fallbacks=[CommandHandler("cancel", cancel)],
         per_message=False,
     ),
     ConversationHandler(

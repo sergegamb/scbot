@@ -1,12 +1,20 @@
+import logging
+
 from telegram import Update
 from telegram.ext import ContextTypes
 
 import keyboards
 import messages
 from sc.interfaces import TaskInterface, RequestTaskInterface, RequestInterface
+from tech import TECHNICIANS
+
+
+logger = logging.getLogger(__name__)
 
 
 async def task_view(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = TECHNICIANS.get(update.callback_query.from_user.id)
+    logger.info(f"Receive {update.callback_query.data} from {user}")
     task_id = update.callback_query.data.split("_")[-1]
     context.user_data["task_id"] = task_id
     task = TaskInterface.get(task_id)
@@ -35,6 +43,8 @@ async def request_task_view(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def task_list(update: Update, _):
+    user = TECHNICIANS.get(update.callback_query.from_user.id)
+    logger.info(f"Receive tasks callback from {user}")
     tasks = TaskInterface.list()
     keyboard = keyboards.task_list_keyboard(tasks)
     await update.callback_query.edit_message_text(
@@ -44,6 +54,8 @@ async def task_list(update: Update, _):
 
 
 async def delete_task(update: Update, _):
+    user = TECHNICIANS.get(update.callback_query.from_user.id)
+    logger.info(f"Receive {update.callback_query.data} callback from {user}")
     task_id = update.callback_query.data.split("_")[-1]
     TaskInterface.delete(task_id)
     return await task_list(update, _)

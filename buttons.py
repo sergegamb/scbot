@@ -114,10 +114,20 @@ to_hold_button = InlineKeyboardButton(
 
 task_to_done = InlineKeyboardButton(
     text="Выполнена",
-    callback_data="to_done"
+    callback_data="task_to_done"
+)
+
+request_task_to_done = InlineKeyboardButton(
+    text="Выполнена",
+    callback_data="request_task_to_done"
 )
 
 add_worklog = InlineKeyboardButton(
     text="Внести ворклог",
     callback_data="add_worklog"
+)
+
+add_task_worklog = InlineKeyboardButton(
+    text="Внести ворклог",
+    callback_data="add_task_worklog"
 )
