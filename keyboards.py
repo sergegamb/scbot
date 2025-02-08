@@ -31,6 +31,7 @@ def request_task_keyboard(task: Task):
     if task.status.name != "Выполнена":
         keyboard.append(buttons.request_task_to_done)
     keyboard.extend([
+        buttons.add_request_task_worklog,
         buttons.request_button(request),
         buttons.open_request_task(task),
         buttons.back_to("menu")])

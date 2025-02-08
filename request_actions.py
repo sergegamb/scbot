@@ -103,6 +103,8 @@ async def menu_command(update: Update, _):
     )
 
 async def menu_callback(update: Update, _):
+    user = TECHNICIANS.get(update.message.from_user.id)
+    logger.info(f"Receive menu callback from {user}")
     await update.callback_query.edit_message_text(
         text=messages.menu,
         reply_markup=keyboards.menu_keyboard

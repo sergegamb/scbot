@@ -11,6 +11,7 @@ load_dotenv()
 
 from add_worklog import add_worklog_handler
 from add_task_worklog import add_task_worklog_handler
+from add_request_task_worklog import add_request_task_worklog_handler
 from task_to_done import request_task_to_done_handler, task_to_done_handler
 from to_hold import to_hold_handler
 from to_work import to_work_handler
@@ -48,6 +49,7 @@ def main():
     app = ApplicationBuilder().token(os.getenv("BOTTOKEN")).build()
     app.add_error_handler(error_handler)
     app.add_handler(add_task_worklog_handler)
+    app.add_handler(add_request_task_worklog_handler)
     app.add_handler(request_task_to_done_handler)
     app.add_handler(task_to_done_handler)
     app.add_handlers(my_handlers)

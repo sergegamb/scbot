@@ -131,3 +131,8 @@ add_task_worklog = InlineKeyboardButton(
     text="Внести ворклог",
     callback_data="add_task_worklog"
 )
+
+add_request_task_worklog = InlineKeyboardButton(
+    text="Внести ворклог",
+    callback_data="add_request_task_worklog"
+)

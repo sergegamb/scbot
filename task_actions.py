@@ -28,10 +28,13 @@ async def task_view(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def request_task_view(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = TECHNICIANS.get(update.callback_query.from_user.id)
+    logger.info(f"Receive {update.callback_query.data} from {user}")
     callback_data = update.callback_query.data.split("_")
     task_id = callback_data[-2]
     request_id = callback_data[-1]
     context.user_data["task_id"] = task_id
+    context.user_data["request_id"] = request_id
     task = RequestTaskInterface.get(request_id, task_id)
     await update.callback_query.answer("Yo yo")
     message_text = f"#{task.id}\n{task.title}"
