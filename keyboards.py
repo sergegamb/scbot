@@ -5,14 +5,6 @@ import buttons
 from sc.task_model import Task
 from sc.request_model import Request
 
-next_page  = InlineKeyboardButton(
-    text="Next page",
-    callback_data="next_page"
-    )
-previous_page = InlineKeyboardButton(
-    text="Previous page",
-    callback_data="previous_page"
-)
 
 def task_keyboard(task: Task):
     keyboard = [buttons.delete_task(task.id)]
@@ -38,11 +30,17 @@ def request_task_keyboard(task: Task):
     return InlineKeyboardMarkup.from_column(keyboard)
 
 
-def task_list_keyboard(tasks):
-    keyboard = [buttons.add_task_button]
-    keyboard.extend([buttons.task_button(task) for task in tasks])
-    keyboard.append(buttons.back_to("menu"))
-    return InlineKeyboardMarkup.from_column(keyboard)
+def task_list_keyboard(tasks, page):
+    keyboard = [[buttons.add_task_button]]
+    keyboard.extend([[buttons.task_button(task)] for task in tasks])
+    bottom_row = []
+    if page != 1:
+        bottom_row = [buttons.previous_tasks_page]
+    bottom_row.extend([
+        buttons.back_to("menu"),
+        buttons.next_tasks_page])
+    keyboard.append(bottom_row)
+    return InlineKeyboardMarkup(keyboard)
 
 
 def request_keyboard(request: Request, tasks):
@@ -54,7 +52,7 @@ def request_keyboard(request: Request, tasks):
     return InlineKeyboardMarkup.from_column(keyboard)
 
 
-def  request_list_keyboard(requests, filter_option):
+def request_list_keyboard(requests, filter_option):
     first_button = InlineKeyboardButton(
         text=f"Filter: {filter_option} requests",
         callback_data="filters"
@@ -62,7 +60,10 @@ def  request_list_keyboard(requests, filter_option):
     keyboard = [[first_button]]
     for request in requests:
         keyboard.append([buttons.request_button(request)])
-    keyboard.append([previous_page, buttons.back_to("menu"), next_page])
+    keyboard.append([
+        buttons.previous_requests_page,
+        buttons.back_to("menu"),
+        buttons.next_requests_page])
     return InlineKeyboardMarkup(keyboard)
 
 

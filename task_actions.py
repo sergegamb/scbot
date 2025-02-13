@@ -45,15 +45,28 @@ async def request_task_view(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-async def task_list(update: Update, _):
+async def task_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = TECHNICIANS.get(update.callback_query.from_user.id)
-    logger.info(f"Receive tasks callback from {user}")
-    tasks = TaskInterface.list()
-    keyboard = keyboards.task_list_keyboard(tasks)
+    logger.info(f"Receive tasks callback from {user} or next/previous page")
+    page = context.user_data.get("tasks_page", 1)
+    tasks = TaskInterface.list(page)
+    keyboard = keyboards.task_list_keyboard(tasks, page)
     await update.callback_query.edit_message_text(
             text=messages.task_message,
             reply_markup=keyboard
             )
+
+
+async def task_page(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = TECHNICIANS.get(update.callback_query.from_user.id)
+    logger.info(f"Receive {update.callback_query.data} callback from {user}")
+    if context.user_data.get("tasks_page") is None:
+        context.user_data["tasks_page"] = 1
+    if update.callback_query.data == "previous_tasks_page":
+        context.user_data["tasks_page"] -= 1
+    else:
+        context.user_data["tasks_page"] += 1
+    await task_list(update, context)
 
 
 async def delete_task(update: Update, _):

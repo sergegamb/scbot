@@ -136,3 +136,23 @@ add_request_task_worklog = InlineKeyboardButton(
     text="Внести ворклог",
     callback_data="add_request_task_worklog"
 )
+
+next_requests_page = InlineKeyboardButton(
+    text="Next page",
+    callback_data="next_requests_page"
+    )
+
+previous_requests_page = InlineKeyboardButton(
+    text="Previous page",
+    callback_data="previous_requests_page"
+)
+
+next_tasks_page = InlineKeyboardButton(
+    text="Next page",
+    callback_data="next_tasks_page"
+)
+
+previous_tasks_page = InlineKeyboardButton(
+    text="Previous page",
+    callback_data="previous_tasks_page"
+)

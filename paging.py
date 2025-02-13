@@ -68,8 +68,8 @@ async def previous_page_callback(update: Update, context: ContextTypes.DEFAULT_T
     await request_list_view(update, context, requests)
 
 
-next_page_handler = CallbackQueryHandler(next_page_callback, "next_page")
-previous_page_handler = CallbackQueryHandler(previous_page_callback, "previous_page")
+next_page_handler = CallbackQueryHandler(next_page_callback, "next_page_requests")
+previous_page_handler = CallbackQueryHandler(previous_page_callback, "previous_page_requests")
 
 
 paging_handlers = [next_page_handler, previous_page_handler]

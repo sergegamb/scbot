@@ -27,7 +27,8 @@ from task_actions import (
     delete_request_task,
     add_task,
     get_task_title,
-    request_task_view
+    request_task_view,
+    task_page,
 )
 
 warnings.filterwarnings(
@@ -59,6 +60,8 @@ my_handlers = [
         states={0: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_request_task_title)]},
         fallbacks=[CommandHandler("cancel", cancel)],
         per_message=False,
-    )
+    ),
+    CallbackQueryHandler(task_page, "previous_tasks_page"),
+    CallbackQueryHandler(task_page, "next_tasks_page"),
 ]
 
